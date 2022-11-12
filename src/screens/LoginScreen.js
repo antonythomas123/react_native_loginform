@@ -9,23 +9,35 @@ import {
   TouchableOpacity,
   Pressable,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Logo from '../../assets/images/logo1.png';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Google from '../../assets/images/google.png';
 import BaseLogo from '../../assets/images/logo2.png';
+import {PasswordVisibility} from '../components/PasswordVisibility/PasswordVisibility.js';
 
 const LoginScreen = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
   const {height} = useWindowDimensions();
 
   const onLogin = () => {
-    console.warn('Login');
+    console.warn(username, password);
   };
+  const forgotPassword = () => {
+    console.warn('Forgot Password');
+  };
+
+  const {passwordVisibility, rightIcon, handlePasswordVisibility} =
+    PasswordVisibility();
+
   const googleSignIn = () => {
-    console.warn("Google Sign in");
+    console.warn('Google Sign in');
   };
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
         <Image
           source={Logo}
@@ -43,53 +55,78 @@ const LoginScreen = () => {
           color="#666"
           style={styles.email_icon}
         />
-        <TextInput placeholder="Username" style={styles.text_input} />
+        <TextInput
+          placeholder="Username"
+          style={styles.text_input}
+          autoCapitalize="none"
+          value={username}
+          onChangeText={username => setUsername(username)}
+        />
       </View>
       <View style={styles.input}>
         <MaterialIcons name="vpn-key" size={30} style={styles.email_icon} />
         <TextInput
           placeholder="Password"
           style={styles.text_input}
-          secureTextEntry={true}
+          secureTextEntry={passwordVisibility}
+          autoCapitalize="none"
+          value={password}
+          onChangeText={password => setPassword(password)}
         />
-        <TouchableOpacity
-          onPress={() => {
-            console.warn('See Me');
-          }}>
-          <MaterialIcons
-            name="remove-red-eye"
+        <Pressable onPress={handlePasswordVisibility}>
+          <MaterialCommunityIcons
+            name={rightIcon}
             size={22}
             style={styles.email_icon}
           />
-        </TouchableOpacity>
+        </Pressable>
       </View>
       <View style={styles.remember}>
         <Text style={styles.rem}>Remember Me</Text>
-        <Text style={styles.rem}>Forgot Password</Text>
+        <TouchableOpacity onPress={forgotPassword}>
+          <Text style={styles.rem}>Forgot Password</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.press}>
         <Pressable style={styles.button} onPress={onLogin}>
           <Text style={styles.text}>Login</Text>
         </Pressable>
       </View>
-      <View style={styles.alternative_signin}>
-
-        <Text style={styles.in_line}>or Sign in with Google</Text>
-        <Pressable 
-          style={styles.google_sign}
-          onPress={googleSignIn}  
-        >
-          <View style={styles.alternate}>
-            <Image source={Google} style={styles.google} resizeMode="contain" />
-            <Text>Sign in with Google</Text>
-          </View>
+      <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 15}}>
+        <View
+          style={{
+            flex: 1,
+            borderWidth: 0.5,
+            height: 1,
+            backgroundColor: '#000000',
+          }}
+        />
+        <View>
+          <Text style={{paddingHorizontal: 5, textAlign: 'center'}}>
+            Or Sign in with Google
+          </Text>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            borderWidth: 0.5,
+            height: 1,
+            backgroundColor: '#000000',
+          }}
+        />
+      </View>
+      <View style={{width: '100%', alignItems: 'center'}}>
+        <Pressable onPress={googleSignIn} style={styles.googleSignIn}>
+          <Image
+            source={Google}
+            style={{marginRight: 10}}
+            resizeMode="contain"
+          />
+          <Text style={styles.label}>Sign in with Google</Text>
         </Pressable>
       </View>
-      <View style= {styles.baseimage}>
-        <Image
-          source={BaseLogo}
-          style={styles.baseimage_image}
-        />
+      <View style={styles.baseimage}>
+        <Image source={BaseLogo} style={styles.baseimage_image} />
       </View>
     </ScrollView>
   );
@@ -100,7 +137,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 90,
+    paddingTop: 70,
   },
   logo: {
     width: 91,
@@ -112,7 +149,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   tms: {
-    paddingBottom: 43,
+    paddingBottom: 30,
     fontSize: 27,
     fontWeight: 'bold',
   },
@@ -126,7 +163,7 @@ const styles = StyleSheet.create({
     height: 42,
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 3,
+    borderBottomWidth: 2,
     borderBottomColor: '#2F4E62',
     marginHorizontal: 40,
     marginBottom: 21,
@@ -140,7 +177,7 @@ const styles = StyleSheet.create({
     width: '80%',
     marginHorizontal: 40,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
   },
   rem: {
     fontWeight: 'bold',
@@ -164,29 +201,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: 'white',
   },
-  alternative_signin: {
-    width: '100%',
+  googleSignIn: {
+    padding: 5,
+    margin: '5%',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    width: '80%',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 24,
-    borderTopWidth: 1,
-  },
-  in_line: {
-    width: '40%',
-    backgroundColor: '#FFFFFF',
-    marginTop: -12,
-    paddingHorizontal: 10,
-  },
-  alternate: {
-    width: '100%',
-    backgroundColor: '#FFFFFF',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 15,
-  },
-  google: {
-    width: 50,
-    height: 45,
+    elevation: 2,
   },
   baseimage: {
     marginTop: 5,
@@ -195,7 +219,7 @@ const styles = StyleSheet.create({
   },
   baseimage_image: {
     width: 239,
-    height: 145,
+    height: 120,
   },
 });
 export default LoginScreen;
