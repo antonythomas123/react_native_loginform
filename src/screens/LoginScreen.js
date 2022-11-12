@@ -16,6 +16,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Google from '../../assets/images/google.png';
 import BaseLogo from '../../assets/images/logo2.png';
 import {PasswordVisibility} from '../components/PasswordVisibility/PasswordVisibility.js';
+import LinearGradient from 'react-native-linear-gradient';
 
 const LoginScreen = () => {
   const [username, setUsername] = useState('');
@@ -88,9 +89,11 @@ const LoginScreen = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.press}>
-        <Pressable style={styles.button} onPress={onLogin}>
-          <Text style={styles.text}>Login</Text>
-        </Pressable>
+        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#2F4E62', '#3EA7A7']} style={styles.button}>
+          <Pressable onPress={onLogin}>
+            <Text style={styles.text}>Login</Text>
+          </Pressable>
+        </LinearGradient>
       </View>
       <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 15}}>
         <View

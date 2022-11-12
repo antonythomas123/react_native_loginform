@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet,Dimensions, Platform } from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Platform} from 'react-native';
 import React from 'react';
 import LoginScreen from './src/screens/LoginScreen';
 
